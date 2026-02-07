@@ -5,7 +5,7 @@
 -- Admin Credentials (Application Side)
 -- Use these to log in to /admin.html
 -- Email:    admin@phoenix.id
--- Password: admin123
+-- Password: Phoenix_X_2026_Secure!  (UPDATED STRONG PASSWORD)
 
 -- ==========================================
 

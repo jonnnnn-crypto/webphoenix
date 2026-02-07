@@ -7,7 +7,6 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('YOUR_SUPABASE_URL')) {
     console.error('Supabase credentials missing! Check .env file.')
-    // alert('Supabase not configured. Please check .env file.')
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey)
@@ -21,9 +20,10 @@ const logoutBtn = document.getElementById('logout-btn') as HTMLButtonElement
 const docForm = document.getElementById('doc-form') as HTMLFormElement
 const docList = document.getElementById('doc-list') as HTMLElement
 
-// Mock Auth (Replace with Supabase Auth later)
+// Admin Credentials (Hardcoded for Prototype)
+// In production, use Supabase Auth
 const ADMIN_EMAIL = 'admin@phoenix.id'
-const ADMIN_PASS = 'admin123'
+const ADMIN_PASS = 'Phoenix_X_2026_Secure!'
 
 // Login Handling
 loginForm.addEventListener('submit', (e) => {
