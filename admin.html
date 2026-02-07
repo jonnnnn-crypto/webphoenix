@@ -78,16 +78,22 @@
                                 required></textarea>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-400 mb-1">Image URL (Optional)</label>
-                            <input type="url" id="doc-image"
-                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white">
+                            <label class="block text-sm text-gray-400 mb-1">Image</label>
+                            <div id="doc-dropzone"
+                                class="w-full bg-black/50 border-2 border-dashed border-white/10 rounded-lg p-6 text-center hover:border-cyber-blue transition-colors cursor-pointer relative">
+                                <input type="file" id="doc-image-file"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
+                                <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+                                <p class="text-xs text-gray-400" id="doc-file-label">Drag & Drop or Click to Upload</p>
+                            </div>
+                            <input type="hidden" id="doc-image-url">
                         </div>
                         <div>
                             <label class="block text-sm text-gray-400 mb-1">Link (Optional)</label>
                             <input type="url" id="doc-link"
                                 class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white">
                         </div>
-                        <button type="submit"
+                        <button type="submit" id="doc-submit-btn"
                             class="w-full py-2 bg-cyber-blue text-black font-bold uppercase rounded hover:bg-white transition-colors">Add
                             Entry</button>
                     </form>
@@ -125,10 +131,16 @@
                                 required>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-400 mb-1">Image URL</label>
-                            <input type="text" id="member-image"
-                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white"
-                                required>
+                            <label class="block text-sm text-gray-400 mb-1">Image</label>
+                            <div id="member-dropzone"
+                                class="w-full bg-black/50 border-2 border-dashed border-white/10 rounded-lg p-6 text-center hover:border-cyber-blue transition-colors cursor-pointer relative">
+                                <input type="file" id="member-image-file"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
+                                <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+                                <p class="text-xs text-gray-400" id="member-file-label">Drag & Drop or Click to Upload
+                                </p>
+                            </div>
+                            <input type="hidden" id="member-image-url">
                         </div>
                         <div>
                             <label class="block text-sm text-gray-400 mb-1">LinkedIn URL (Optional)</label>
@@ -140,7 +152,7 @@
                             <input type="url" id="member-instagram"
                                 class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white">
                         </div>
-                        <button type="submit"
+                        <button type="submit" id="member-submit-btn"
                             class="w-full py-2 bg-cyber-blue text-black font-bold uppercase rounded hover:bg-white transition-colors">Add
                             Member</button>
                     </form>

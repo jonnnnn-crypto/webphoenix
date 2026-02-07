@@ -5,7 +5,7 @@
 -- Admin Credentials (Application Side)
 -- Use these to log in to /admin.html
 -- Email:    admin@phoenix.id
--- Password: Phoenix_X_2026_Secure!  (UPDATED STRONG PASSWORD)
+-- Password: Phoenix_X_2026_Secure!
 
 -- ==========================================
 
@@ -31,29 +31,66 @@ CREATE TABLE IF NOT EXISTS members (
     instagram_url TEXT
 );
 
--- Enable Row Level Security (RLS)
+-- ==========================================
+-- ROW LEVEL SECURITY (RLS)
+-- ==========================================
+
 ALTER TABLE documentation ENABLE ROW LEVEL SECURITY;
 ALTER TABLE members ENABLE ROW LEVEL SECURITY;
 
--- Create Policies: Allow Public Read Access
+-- Drop existing policies to avoid conflicts (Idempotency Fix)
+DROP POLICY IF EXISTS "Allow public read access docs" ON documentation;
+DROP POLICY IF EXISTS "Allow anon modifications docs" ON documentation;
+DROP POLICY IF EXISTS "Allow public read access members" ON members;
+DROP POLICY IF EXISTS "Allow anon modifications members" ON members;
+
+-- Create Policies
 CREATE POLICY "Allow public read access docs" 
 ON documentation FOR SELECT 
 USING (true);
-
-CREATE POLICY "Allow public read access members" 
-ON members FOR SELECT 
-USING (true);
-
--- Create Policies: Allow Anon Insert/Update/Delete (Use with caution!)
--- Since we are using a simple hardcoded admin panel without Supabase Auth for now,
--- we need to allow the anon key to modify data. 
 
 CREATE POLICY "Allow anon modifications docs" 
 ON documentation FOR ALL 
 USING (true)
 WITH CHECK (true);
 
+CREATE POLICY "Allow public read access members" 
+ON members FOR SELECT 
+USING (true);
+
 CREATE POLICY "Allow anon modifications members" 
 ON members FOR ALL 
 USING (true)
 WITH CHECK (true);
+
+-- ==========================================
+-- STORAGE BUCKET CONFIGURATION
+-- ==========================================
+
+-- Create a bucket for images
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('images', 'images', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Storage Policies
+-- 1. Allow Public Read Access
+DROP POLICY IF EXISTS "Public Access" ON storage.objects;
+CREATE POLICY "Public Access"
+ON storage.objects FOR SELECT
+USING ( bucket_id = 'images' );
+
+-- 2. Allow Anon Upload/Delete (For Admin Panel)
+DROP POLICY IF EXISTS "Anon Upload" ON storage.objects;
+CREATE POLICY "Anon Upload"
+ON storage.objects FOR INSERT
+WITH CHECK ( bucket_id = 'images' );
+
+DROP POLICY IF EXISTS "Anon Update" ON storage.objects;
+CREATE POLICY "Anon Update"
+ON storage.objects FOR UPDATE
+USING ( bucket_id = 'images' );
+
+DROP POLICY IF EXISTS "Anon Delete" ON storage.objects;
+CREATE POLICY "Anon Delete"
+ON storage.objects FOR DELETE
+USING ( bucket_id = 'images' );

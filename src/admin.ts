@@ -27,10 +27,16 @@ const tabMembers = document.getElementById('tab-members') as HTMLElement
 // Doc Elements
 const docForm = document.getElementById('doc-form') as HTMLFormElement
 const docList = document.getElementById('doc-list') as HTMLElement
+const docFileInput = document.getElementById('doc-image-file') as HTMLInputElement
+const docFileLabel = document.getElementById('doc-file-label') as HTMLElement
+const docSubmitBtn = document.getElementById('doc-submit-btn') as HTMLButtonElement
 
 // Member Elements
 const memberForm = document.getElementById('member-form') as HTMLFormElement
 const memberList = document.getElementById('member-list') as HTMLElement
+const memberFileInput = document.getElementById('member-image-file') as HTMLInputElement
+const memberFileLabel = document.getElementById('member-file-label') as HTMLElement
+const memberSubmitBtn = document.getElementById('member-submit-btn') as HTMLButtonElement
 
 // Admin Credentials
 const ADMIN_EMAIL = 'admin@phoenix.id'
@@ -102,6 +108,42 @@ function showLogin() {
     dashboardSection.classList.add('hidden')
 }
 
+// --- FILE UPLOAD LOGIC ---
+
+function setupFileUpload(input: HTMLInputElement, label: HTMLElement) {
+    input.addEventListener('change', () => {
+        if (input.files && input.files[0]) {
+            label.textContent = `Selected: ${input.files[0].name}`;
+            label.classList.add('text-cyber-blue');
+        }
+    });
+}
+
+setupFileUpload(docFileInput, docFileLabel);
+setupFileUpload(memberFileInput, memberFileLabel);
+
+async function uploadImage(file: File): Promise<string | null> {
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+    const filePath = `${fileName}`
+
+    const { data, error } = await supabase.storage
+        .from('images')
+        .upload(filePath, file)
+
+    if (error) {
+        console.error('Upload Error:', error)
+        alert('Failed to upload image: ' + error.message)
+        return null
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath)
+
+    return publicUrl
+}
+
 // --- DOCUMENTATION LOGIC ---
 
 async function fetchDocs() {
@@ -154,21 +196,42 @@ function renderDocs(docs: any[]) {
 docForm.addEventListener('submit', async (e) => {
     e.preventDefault()
 
-    const title = (document.getElementById('doc-title') as HTMLInputElement).value
-    const date = (document.getElementById('doc-date') as HTMLInputElement).value
-    const description = (document.getElementById('doc-desc') as HTMLTextAreaElement).value
-    const image_url = (document.getElementById('doc-image') as HTMLInputElement).value
-    const link = (document.getElementById('doc-link') as HTMLInputElement).value
+    // Disable button state
+    const originalBtnText = docSubmitBtn.textContent;
+    docSubmitBtn.textContent = 'Uploading...';
+    docSubmitBtn.disabled = true;
 
-    const { error } = await supabase
-        .from('documentation')
-        .insert([{ title, date, description, image_url, link }])
+    try {
+        const title = (document.getElementById('doc-title') as HTMLInputElement).value
+        const date = (document.getElementById('doc-date') as HTMLInputElement).value
+        const description = (document.getElementById('doc-desc') as HTMLTextAreaElement).value
+        const link = (document.getElementById('doc-link') as HTMLInputElement).value
+        let image_url = ''
 
-    if (error) {
-        alert('Error adding entry: ' + error.message)
-    } else {
-        (e.target as HTMLFormElement).reset()
-        fetchDocs()
+        if (docFileInput.files && docFileInput.files[0]) {
+            const uploadedUrl = await uploadImage(docFileInput.files[0])
+            if (uploadedUrl) image_url = uploadedUrl
+            else throw new Error('Image upload failed')
+        }
+
+        const { error } = await supabase
+            .from('documentation')
+            .insert([{ title, date, description, image_url, link }])
+
+        if (error) {
+            throw error;
+        }
+
+        (e.target as HTMLFormElement).reset();
+        docFileLabel.textContent = 'Drag & Drop or Click to Upload';
+        docFileLabel.classList.remove('text-cyber-blue');
+        fetchDocs();
+
+    } catch (error: any) {
+        alert('Error: ' + error.message)
+    } finally {
+        docSubmitBtn.textContent = originalBtnText;
+        docSubmitBtn.disabled = false;
     }
 })
 
@@ -236,21 +299,43 @@ function renderMembers(members: any[]) {
 memberForm.addEventListener('submit', async (e) => {
     e.preventDefault()
 
-    const name = (document.getElementById('member-name') as HTMLInputElement).value
-    const role = (document.getElementById('member-role') as HTMLInputElement).value
-    const image_url = (document.getElementById('member-image') as HTMLInputElement).value
-    const linkedin_url = (document.getElementById('member-linkedin') as HTMLInputElement).value
-    const instagram_url = (document.getElementById('member-instagram') as HTMLInputElement).value
+    const originalBtnText = memberSubmitBtn.textContent;
+    memberSubmitBtn.textContent = 'Uploading...';
+    memberSubmitBtn.disabled = true;
 
-    const { error } = await supabase
-        .from('members')
-        .insert([{ name, role, image_url, linkedin_url, instagram_url }])
+    try {
+        const name = (document.getElementById('member-name') as HTMLInputElement).value
+        const role = (document.getElementById('member-role') as HTMLInputElement).value
+        const linkedin_url = (document.getElementById('member-linkedin') as HTMLInputElement).value
+        const instagram_url = (document.getElementById('member-instagram') as HTMLInputElement).value
+        let image_url = ''
 
-    if (error) {
-        alert('Error adding member: ' + error.message)
-    } else {
-        (e.target as HTMLFormElement).reset()
-        fetchMembers()
+        if (memberFileInput.files && memberFileInput.files[0]) {
+            const uploadedUrl = await uploadImage(memberFileInput.files[0])
+            if (uploadedUrl) image_url = uploadedUrl
+            else throw new Error('Image upload failed')
+        } else {
+            throw new Error('Member image is required!');
+        }
+
+        const { error } = await supabase
+            .from('members')
+            .insert([{ name, role, image_url, linkedin_url, instagram_url }])
+
+        if (error) {
+            throw error
+        }
+
+        (e.target as HTMLFormElement).reset();
+        memberFileLabel.textContent = 'Drag & Drop or Click to Upload';
+        memberFileLabel.classList.remove('text-cyber-blue');
+        fetchMembers();
+
+    } catch (error: any) {
+        alert('Error: ' + error.message)
+    } finally {
+        memberSubmitBtn.textContent = originalBtnText;
+        memberSubmitBtn.disabled = false;
     }
 })
 
