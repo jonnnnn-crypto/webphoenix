@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Utilities */
+@layer utilities {
+  .glass-card {
+    @apply bg-white/5 border border-white/10 backdrop-blur-md;
+  }
+}
+
+/* Global Styles */
+body {
+  @apply bg-cyber-dark text-white font-inter overflow-x-hidden;
+  scroll-behavior: smooth;
+}

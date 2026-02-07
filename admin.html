@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Phoenixcysec.id</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body class="bg-cyber-dark text-white font-inter min-h-screen flex items-center justify-center p-4">
+
+    <!-- Login Section -->
+    <div id="login-section" class="w-full max-w-md">
+        <div class="glass-card p-8 rounded-xl relative overflow-hidden">
+            <h2 class="text-2xl font-bold mb-6 text-center text-cyber-blue">Admin Access</h2>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Email</label>
+                    <input type="email" id="email"
+                        class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white transition-colors"
+                        required>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Password</label>
+                    <input type="password" id="password"
+                        class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white transition-colors"
+                        required>
+                </div>
+                <button type="submit"
+                    class="w-full py-3 bg-cyber-blue text-black font-bold uppercase tracking-wider rounded hover:bg-white transition-colors">Login</button>
+            </form>
+            <p id="login-error" class="text-red-500 text-sm mt-4 text-center hidden"></p>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="w-full max-w-6xl hidden fade-in">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">Documentation Manager</h1>
+            <button id="logout-btn"
+                class="px-4 py-2 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white transition-colors">Logout</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Add Form -->
+            <div class="lg:col-span-1">
+                <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 text-cyber-blue">Add New Entry</h3>
+                    <form id="doc-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Title</label>
+                            <input type="text" id="doc-title"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Date</label>
+                            <input type="date" id="doc-date"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white text-gray-400"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Description</label>
+                            <textarea id="doc-desc" rows="4"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white"
+                                required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Image URL (Optional)</label>
+                            <input type="url" id="doc-image"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Link (Optional)</label>
+                            <input type="url" id="doc-link"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white">
+                        </div>
+                        <button type="submit"
+                            class="w-full py-2 bg-cyber-blue text-black font-bold uppercase rounded hover:bg-white transition-colors">Add
+                            Entry</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List View -->
+            <div class="lg:col-span-2">
+                <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 text-cyber-blue">Existing Entries</h3>
+                    <div id="doc-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Items will be injected here -->
+                        <div class="text-center text-gray-500 py-8">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/admin.ts"></script>
+</body>
+
+</html>
