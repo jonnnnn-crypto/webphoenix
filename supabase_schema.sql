@@ -94,3 +94,32 @@ DROP POLICY IF EXISTS "Anon Delete" ON storage.objects;
 CREATE POLICY "Anon Delete"
 ON storage.objects FOR DELETE
 USING ( bucket_id = 'images' );
+
+-- ==========================================
+-- SEED DATA (INITIAL MEMBERS)
+-- ==========================================
+
+-- Insert original members if they don't exist
+-- Using DO block to check for existence before inserting to prevent duplicates on re-runs
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM members WHERE name = 'Ghifari Azhar') THEN
+        INSERT INTO members (name, role, image_url, linkedin_url, instagram_url)
+        VALUES ('Ghifari Azhar', 'Founder', '/ghifariazhar.jpg', 'https://www.linkedin.com/in/ghifari-azhar/', 'https://www.instagram.com/jonobaek/');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM members WHERE name = 'Riski Permana') THEN
+        INSERT INTO members (name, role, image_url, linkedin_url, instagram_url)
+        VALUES ('Riski Permana', 'Co Founder', '/riskipermana.jpg', 'https://www.linkedin.com/in/riskipermana/', 'https://instagram.com/rskprmn_668');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM members WHERE name = 'Farel Sapero') THEN
+        INSERT INTO members (name, role, image_url, linkedin_url, instagram_url)
+        VALUES ('Farel Sapero', 'Management', '/farelsapero.jpg', NULL, 'https://www.instagram.com/frellvero');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM members WHERE name = 'Musa H. Lubis') THEN
+        INSERT INTO members (name, role, image_url, linkedin_url, instagram_url)
+        VALUES ('Musa H. Lubis', 'Founder', '/musahamonangan.jpg', 'https://www.linkedin.com/in/musa-hamonangan-lubis-a719b9282/', 'https://www.instagram.com/ouashxy/');
+    END IF;
+END $$;
