@@ -39,16 +39,25 @@
     <!-- Dashboard Section -->
     <div id="dashboard-section" class="w-full max-w-6xl hidden fade-in">
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold">Documentation Manager</h1>
-            <button id="logout-btn"
-                class="px-4 py-2 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white transition-colors">Logout</button>
+            <h1 class="text-3xl font-bold">Phoenix Admin</h1>
+            <div class="flex gap-4">
+                <div class="flex bg-white/5 rounded p-1">
+                    <button id="tab-docs"
+                        class="px-4 py-1 rounded bg-cyber-blue text-black font-bold text-sm transition-colors">Documentation</button>
+                    <button id="tab-members"
+                        class="px-4 py-1 rounded text-gray-400 hover:text-white text-sm transition-colors">Members</button>
+                </div>
+                <button id="logout-btn"
+                    class="px-4 py-2 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white transition-colors text-sm">Logout</button>
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Documentation View -->
+        <div id="view-docs" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Add Form -->
             <div class="lg:col-span-1">
                 <div class="glass-card p-6 rounded-xl">
-                    <h3 class="text-xl font-bold mb-4 text-cyber-blue">Add New Entry</h3>
+                    <h3 class="text-xl font-bold mb-4 text-cyber-blue">Add Documentation</h3>
                     <form id="doc-form" class="space-y-4">
                         <div>
                             <label class="block text-sm text-gray-400 mb-1">Title</label>
@@ -90,12 +99,65 @@
                 <div class="glass-card p-6 rounded-xl">
                     <h3 class="text-xl font-bold mb-4 text-cyber-blue">Existing Entries</h3>
                     <div id="doc-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-                        <!-- Items will be injected here -->
                         <div class="text-center text-gray-500 py-8">Loading...</div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Members View -->
+        <div id="view-members" class="grid grid-cols-1 lg:grid-cols-3 gap-8 hidden">
+            <!-- Add Form -->
+            <div class="lg:col-span-1">
+                <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 text-cyber-blue">Add Member</h3>
+                    <form id="member-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Name</label>
+                            <input type="text" id="member-name"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Role</label>
+                            <input type="text" id="member-role"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Image URL</label>
+                            <input type="text" id="member-image"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">LinkedIn URL (Optional)</label>
+                            <input type="url" id="member-linkedin"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Instagram URL (Optional)</label>
+                            <input type="url" id="member-instagram"
+                                class="w-full bg-black/50 border border-white/10 rounded p-2 focus:border-cyber-blue outline-none text-white">
+                        </div>
+                        <button type="submit"
+                            class="w-full py-2 bg-cyber-blue text-black font-bold uppercase rounded hover:bg-white transition-colors">Add
+                            Member</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List View -->
+            <div class="lg:col-span-2">
+                <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 text-cyber-blue">Team Members</h3>
+                    <div id="member-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div class="text-center text-gray-500 py-8">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script type="module" src="/src/admin.ts"></script>
